@@ -18,9 +18,34 @@ from torch import Tensor
 
 # needed due to empty tensor bug in pytorch and torchvision 0.5
 import torchvision
-if float(torchvision.__version__[:3]) < 0.7:
+try:
+    # old location (torchvision ≤0.6)
     from torchvision.ops import _new_empty_tensor
+except ImportError:
+    try:
+        # newer private util (torchvision ≥0.7)
+        from torchvision.ops._utils import _NewEmptyTensorOp
+        def _new_empty_tensor(tensor, new_shape):
+            return _NewEmptyTensorOp.apply(tensor, new_shape)
+    except ImportError:
+        # fallback: create an empty tensor directly
+        def _new_empty_tensor(tensor, new_shape):
+            return torch.empty(new_shape, dtype=tensor.dtype, device=tensor.device)
+
+# _output_size (used for padding calculations in NestedTensor)
+try:
     from torchvision.ops.misc import _output_size
+except ImportError:
+    try:
+        from torchvision.ops._utils import _output_size
+    except ImportError:
+        import math
+        def _output_size(input_size, kernel_size, stride, padding, dilation):
+            # compute H_out, W_out for 2D convolution-like ops
+            h_in, w_in = input_size
+            h_out = math.floor((h_in + 2*padding[0] - dilation[0]*(kernel_size[0]-1) - 1)/stride[0] + 1)
+            w_out = math.floor((w_in + 2*padding[1] - dilation[1]*(kernel_size[1]-1) - 1)/stride[1] + 1)
+            return (h_out, w_out)
 
 
 class SmoothedValue(object):
