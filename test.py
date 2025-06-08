@@ -171,6 +171,8 @@ for content_path in content_paths:
         
         with torch.no_grad():
             output= network(content,style)       
+        if isinstance(output, (tuple, list)):
+          output = output[0]
         output = output.cpu()
                 
         output_name = '{:s}/{:s}_stylized_{:s}{:s}'.format(
