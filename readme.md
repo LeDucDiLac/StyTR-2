@@ -1,24 +1,6 @@
 # StyTr^2 : Image Style Transfer with Transformers（CVPR2022）
 *Authors: [Yingying Deng](https://diyiiyiii.github.io/), Fan Tang, XingjiaPan, Weiming Dong, Chongyang Ma, Changsheng Xu*
 
-This paper is proposed to achieve unbiased image style transfer based on the transformer model. We can promote the stylization effect compared with state-of-the-art methods.
-This repository is the official implementation of [SyTr^2 : Image Style Transfer with Transformers](https://arxiv.org/abs/2105.14576).
-
-## Results presentation 
-<p align="center">
-<img src="https://github.com/diyiiyiii/StyTR-2/blob/main/Figure/Unbiased.png" width="90%" height="90%">
-</p>
-Compared with some state-of-the-art algorithms, our method has a strong ability to avoid content leakage and has better feature representation ability.  <br>
-
-
-## Framework
-<p align="center">
-<img src="https://github.com/diyiiyiii/StyTR-2/blob/main/Figure/network.png" width="100%" height="100%">
-</p> 
-The overall pipeline of our StyTr^2 framework. We split the content and style images into patches, and use a linear projection to obtain image sequences. Then the content sequences added with CAPE are fed into the content transformer encoder, while the style sequences are fed into the style transformer encoder. Following the two transformer encoders, a multi-layer transformer decoder is adopted to stylize the content sequences according to the style sequences. Finally, we use a progressive upsampling decoder to obtain the stylized images with high-resolution.
-
-
-
 ## Experiment
 ### Requirements
 * python 3.6
